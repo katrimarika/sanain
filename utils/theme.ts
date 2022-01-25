@@ -7,7 +7,7 @@ export const theme = {
     green: '#00bb00',
 
     // Error
-    red: '#bb0000',
+    red: '#ff3030',
   },
   fontFamily: {
     body: 'Roboto, Helvetica Neue, sans-serif',

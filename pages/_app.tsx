@@ -37,8 +37,8 @@ export const globals = css`
     }
 
     body {
-      background-color: ${theme.colors.white};
-      color: ${theme.colors.black};
+      background-color: ${theme.colors.black};
+      color: ${theme.colors.white};
       font-family: ${theme.fontFamily.body};
       font-weight: normal;
       font-size: 1.125rem;
