@@ -1,6 +1,7 @@
 import { css } from 'linaria';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import Layout from '../components/layout';
 import { theme } from '../utils/theme';
 
 export const globals = css`
@@ -89,7 +90,9 @@ function App({ Component, pageProps }: AppProps) {
           href="/favicon-152.png"
         ></link>
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
