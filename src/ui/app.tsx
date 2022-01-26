@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/menu.svg';
-import { onLandscape } from '../utils/style';
+import { WORD_LENGTH } from '../utils/settings';
+import { onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
 import { useWordToGuess } from '../utils/word-to-guess';
 import { Keyboard } from './Keyboard';
@@ -42,6 +43,10 @@ const Main = styled.main`
   ${onLandscape} {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
+
+    ${onNotSmall} {
+      grid-column-gap: 3rem;
+    }
   }
 `;
 
@@ -91,7 +96,10 @@ export const App: FC = () => {
         <PlayArea guesses={guesses} currentGuess={currentGuess} />
         <Keyboard
           guesses={guesses}
-          onChange={setCurrentGuess}
+          onPress={(l) =>
+            setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
+          }
+          onRemove={() => setCurrentGuess((g) => g.slice(0, g.length - 1))}
           onSubmit={(g) => {
             const validGuess = submitGuess(g);
             if (validGuess) {
@@ -105,7 +113,7 @@ export const App: FC = () => {
         <Toast show={invalidGuess}>Sana ei löydy sanakirjasta!</Toast>
         <StatisticsDialog
           isOpen={status !== 'guess' || statisticsOpen}
-          setOpen={setStatisticsOpen}
+          setIsOpen={setStatisticsOpen}
           status={status}
           newGame={newGame}
         />

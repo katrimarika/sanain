@@ -1,7 +1,6 @@
 import { words5 } from './words';
 import { useState } from 'react';
-
-const MAX_GUESSES = 6;
+import { MAX_GUESSES } from './settings';
 
 const isValidWord = (wrd: string) => words5.includes(wrd);
 
@@ -70,7 +69,7 @@ export const useWordToGuess = () => {
   };
 
   /**
-   * @param g Guess string, must be of length 5
+   * @param g Guess string, must be of length WORD_LENGTH
    * @returns true if the guess is valid, false otherwise
    */
   function submitGuess(g: string) {

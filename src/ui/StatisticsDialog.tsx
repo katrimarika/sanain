@@ -102,11 +102,11 @@ const Notice = styled.div`
 
 export const StatisticsDialog: FC<{
   isOpen: boolean;
-  setOpen: (o: boolean) => void;
+  setIsOpen: (o: boolean) => void;
   status: 'win' | 'lose' | 'guess';
   newGame: () => void;
-}> = ({ isOpen, setOpen, status, newGame }) => (
-  <Dialog.Root open={isOpen} onOpenChange={setOpen}>
+}> = ({ isOpen, setIsOpen, status, newGame }) => (
+  <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
     <Dialog.Portal>
       <Wrapper>
         <Content>
@@ -120,7 +120,10 @@ export const StatisticsDialog: FC<{
           <div>TBD</div>
           <Button
             icon={status === 'guess' ? RefreshIcon : PlusIcon}
-            onClick={newGame}
+            onClick={() => {
+              newGame();
+              setIsOpen(false);
+            }}
           >
             Uusi peli
           </Button>
