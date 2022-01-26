@@ -1,9 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import MenuIcon from '../icons/menu.svg';
 import { onLandscape } from '../utils/style';
 import { theme } from '../utils/theme';
 import { useWordToGuess } from '../utils/word-to-guess';
-import RefreshIcon from '../icons/refresh.svg';
+import { Keyboard } from './Keyboard';
+import { PlayArea } from './PlayArea';
+import { StatisticsDialog } from './StatisticsDialog';
+import { Toast } from './Toast';
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,16 +16,17 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 0.75rem 1.5rem;
+  padding: 0 1.5rem;
   border-bottom: 2px solid ${theme.colors.green};
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled.h1`
   font-weight: bold;
   font-size: 1.25rem;
-  margin: 0;
+  margin: 0.75rem 0;
 `;
 
 const Main = styled.main`
@@ -40,18 +45,19 @@ const Main = styled.main`
   }
 `;
 
-const Button = styled.button`
-  display: inline-block;
-  padding: 0.25rem 0 0 1.25rem;
-  color: ${theme.colors.white};
+const MenuButton = styled.button`
+  display: flex;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  color: ${theme.colors.green};
   background: transparent;
   border: 0;
-  border-bottom: 1px solid ${theme.colors.green};
   font-size: 1rem;
   font-family: ${theme.fontFamily.body};
-  background-image: url(${RefreshIcon});
-  background-size: 1rem;
-  background-position: left 0 top 50%;
+  background-image: url(${MenuIcon});
+  background-size: 2rem;
+  background-position: left 50% top 50%;
   background-repeat: no-repeat;
 
   &:active {
@@ -67,17 +73,42 @@ const Button = styled.button`
 `;
 
 export const App: FC = () => {
-  const { word, guesses, submitGuess, changeWord } = useWordToGuess();
+  const { guesses, submitGuess, newGame, status } = useWordToGuess();
+  const [currentGuess, setCurrentGuess] = useState('');
+  const [invalidGuess, setInvalidGuess] = useState(false);
+  const [statisticsOpen, setStatisticsOpen] = useState(false);
 
   return (
     <Wrapper>
       <Header>
         <Title>Sanain</Title>
-        <Button onClick={changeWord}>Vaihda</Button>
+        <MenuButton
+          onClick={() => setStatisticsOpen(true)}
+          aria-label="Valikko"
+        />
       </Header>
       <Main>
-        <div>Pelialue</div>
-        <div>{'Näppäimistö'}</div>
+        <PlayArea guesses={guesses} currentGuess={currentGuess} />
+        <Keyboard
+          guesses={guesses}
+          onChange={setCurrentGuess}
+          onSubmit={(g) => {
+            const validGuess = submitGuess(g);
+            if (validGuess) {
+              setCurrentGuess('');
+            } else {
+              setInvalidGuess(true);
+              setTimeout(() => setInvalidGuess(false), 3000);
+            }
+          }}
+        />
+        <Toast show={invalidGuess}>Sana ei löydy sanakirjasta!</Toast>
+        <StatisticsDialog
+          isOpen={status !== 'guess' || statisticsOpen}
+          setOpen={setStatisticsOpen}
+          status={status}
+          newGame={newGame}
+        />
       </Main>
     </Wrapper>
   );
