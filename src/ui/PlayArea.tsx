@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MAX_GUESSES, WORD_LENGTH } from '../utils/settings';
 import { onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
+import { Hit } from '../utils/word-helpers';
 
 const Grid = styled.div`
   margin: 0 auto;
@@ -31,7 +32,7 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0.125rem 0.5rem;
-  line-height: 1;
+  line-height: 1.2;
   box-sizing: content-box;
   min-width: 1.75rem;
   min-height: 1.75rem;
@@ -41,23 +42,38 @@ const Box = styled.div`
     font-size: 2.25rem;
     min-width: 2.25rem;
   }
+
+  &.hit {
+    color: ${theme.colors.green};
+    box-shadow: inset 0 0 0 3px ${theme.colors.green};
+  }
+
+  &.place {
+    color: ${theme.colors.yellow};
+    box-shadow: inset 0 0 0 3px ${theme.colors.yellow};
+  }
+
+  &.miss {
+    color: ${theme.colors.gray};
+    border-color: ${theme.colors.gray};
+  }
 `;
 
 export const PlayArea: FC<{
   guesses: string[];
+  hits: Hit[][];
   currentGuess: string;
-}> = ({ guesses, currentGuess }) => {
+}> = ({ guesses, hits, currentGuess }) => {
   const rows = [...new Array(MAX_GUESSES)];
-
-  // TODO: show hits
 
   return (
     <Grid>
       {rows.map((_, i) => {
         const rowGuess = guesses[i];
         const showCurrent = i === guesses.length;
+        const rowHits = hits[i] ?? [];
         return [...new Array(WORD_LENGTH)].map((_, j) => (
-          <Box key={`box-${i}-${j}`}>
+          <Box key={`box-${i}-${j}`} className={rowHits[j]}>
             {rowGuess ? rowGuess[j] : showCurrent ? currentGuess[j] || '' : ''}
           </Box>
         ));

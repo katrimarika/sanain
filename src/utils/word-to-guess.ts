@@ -80,6 +80,7 @@ export const useWordToGuess = () => {
     const currentGuessCount = guesses.length + 1;
 
     if (g === word) {
+      setGuesses((gs) => [...gs, g]);
       const newStats = handleCompletion('win', currentGuessCount);
       setStatistics(newStats);
       setStatus('win');
@@ -87,12 +88,11 @@ export const useWordToGuess = () => {
     }
 
     if (isValidWord(g)) {
+      setGuesses((gs) => [...gs, g]);
       if (currentGuessCount >= MAX_GUESSES) {
         const newStats = handleCompletion('lose', currentGuessCount);
         setStatistics(newStats);
         setStatus('lose');
-      } else {
-        setGuesses((gs) => [...gs, g]);
       }
       return true;
     }

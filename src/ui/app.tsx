@@ -4,6 +4,7 @@ import MenuIcon from '../icons/menu.svg';
 import { WORD_LENGTH } from '../utils/settings';
 import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
+import { getHitsByLetter, getHitsForGuesses } from '../utils/word-helpers';
 import { useWordToGuess } from '../utils/word-to-guess';
 import { Keyboard } from './Keyboard';
 import { PlayArea } from './PlayArea';
@@ -67,10 +68,13 @@ const MenuButton = styled(ButtonWithHover)`
 `;
 
 export const App: FC = () => {
-  const { guesses, submitGuess, newGame, status } = useWordToGuess();
+  const { word, guesses, submitGuess, newGame, status } = useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [invalidGuess, setInvalidGuess] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
+
+  const hits = getHitsForGuesses(word, guesses);
+  const hitsByLetter = getHitsByLetter(hits, guesses);
 
   return (
     <Wrapper>
@@ -82,9 +86,9 @@ export const App: FC = () => {
         />
       </Header>
       <Main>
-        <PlayArea guesses={guesses} currentGuess={currentGuess} />
+        <PlayArea hits={hits} guesses={guesses} currentGuess={currentGuess} />
         <Keyboard
-          guesses={guesses}
+          hitsByLetter={hitsByLetter}
           onPress={(l) =>
             setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
           }
@@ -107,7 +111,10 @@ export const App: FC = () => {
           isOpen={status !== 'guess' || statisticsOpen}
           setIsOpen={setStatisticsOpen}
           status={status}
-          newGame={newGame}
+          newGame={() => {
+            setCurrentGuess('');
+            newGame();
+          }}
         />
       </Main>
     </Wrapper>

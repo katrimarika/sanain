@@ -6,6 +6,12 @@ export const theme = {
     // Highlight
     green: '#00bb00',
 
+    // Dim
+    gray: '#b2b2b5',
+
+    // Warning
+    yellow: '#ffdf00',
+
     // Error
     red: '#ff3030',
   },

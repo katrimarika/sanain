@@ -2,11 +2,10 @@ import React, { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import BackspaceIcon from '../icons/backspace.svg';
 import WrapIcon from '../icons/wrap.svg';
-import { ButtonWithHover } from '../utils/style';
-import { onLandscape, onNotSmall } from '../utils/style';
+import { LETTERS } from '../utils/settings';
+import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
-
-const letters = 'qwertyuiopåasdfghjklöäzxcvbnm';
+import { Hit } from '../utils/word-helpers';
 
 const Container = styled.div`
   margin: 0 auto auto;
@@ -43,6 +42,18 @@ const Button = styled(ButtonWithHover)`
     border-radius: 0.25rem;
     min-width: 2rem;
   }
+
+  &.hit {
+    background-color: ${theme.colors.green};
+  }
+
+  &.place {
+    background-color: ${theme.colors.yellow};
+  }
+
+  &.miss {
+    background-color: ${theme.colors.gray};
+  }
 `;
 
 const IconButton = styled(Button)`
@@ -65,17 +76,19 @@ const SubmitButton = styled(IconButton)`
 `;
 
 export const Keyboard: FC<{
-  guesses: string[];
+  hitsByLetter: { [key: string]: Hit };
   onPress: (l: string) => void;
   onRemove: () => void;
   onSubmit: () => void;
-}> = ({ guesses, onPress, onRemove, onSubmit }) => {
+}> = ({ hitsByLetter, onPress, onRemove, onSubmit }) => {
   return (
     <Container>
-      {letters.split('').map((l, i) => (
+      {LETTERS.split('').map((l, i) => (
         <Fragment key={`lttr-${l}`}>
           {i === 2 * 11 && <div />}
-          <Button onClick={() => onPress(l)}>{l}</Button>
+          <Button className={hitsByLetter[l]} onClick={() => onPress(l)}>
+            {l}
+          </Button>
         </Fragment>
       ))}
       <div />
