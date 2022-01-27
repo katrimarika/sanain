@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/menu.svg';
 import { WORD_LENGTH } from '../utils/settings';
-import { onLandscape, onNotSmall } from '../utils/style';
+import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
 import { useWordToGuess } from '../utils/word-to-guess';
 import { Keyboard } from './Keyboard';
@@ -37,20 +37,20 @@ const Main = styled.main`
   padding: 1rem 1.5rem 1.5rem;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3fr 2fr;
+  grid-template-rows: 2fr minmax(auto, 1fr);
   grid-gap: 1.5rem;
 
   ${onLandscape} {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr minmax(auto, 1fr);
     grid-template-rows: 1fr;
 
     ${onNotSmall} {
-      grid-column-gap: 3rem;
+      grid-column-gap: 2rem;
     }
   }
 `;
 
-const MenuButton = styled.button`
+const MenuButton = styled(ButtonWithHover)`
   display: flex;
   padding: 0;
   width: 2rem;
@@ -64,17 +64,6 @@ const MenuButton = styled.button`
   background-size: 2rem;
   background-position: left 50% top 50%;
   background-repeat: no-repeat;
-
-  &:active {
-    opacity: 0.8;
-  }
-
-  @media (hover: hover) {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 `;
 
 export const App: FC = () => {
@@ -100,8 +89,11 @@ export const App: FC = () => {
             setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
           }
           onRemove={() => setCurrentGuess((g) => g.slice(0, g.length - 1))}
-          onSubmit={(g) => {
-            const validGuess = submitGuess(g);
+          onSubmit={() => {
+            if (currentGuess.length < WORD_LENGTH) {
+              return;
+            }
+            const validGuess = submitGuess(currentGuess);
             if (validGuess) {
               setCurrentGuess('');
             } else {
@@ -110,7 +102,7 @@ export const App: FC = () => {
             }
           }}
         />
-        <Toast show={invalidGuess}>Sana ei löydy sanakirjasta!</Toast>
+        <Toast show={invalidGuess}>Sana ei löydy sanalistasta!</Toast>
         <StatisticsDialog
           isOpen={status !== 'guess' || statisticsOpen}
           setIsOpen={setStatisticsOpen}

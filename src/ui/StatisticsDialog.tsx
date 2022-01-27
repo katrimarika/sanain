@@ -1,10 +1,11 @@
+import * as Dialog from '@radix-ui/react-dialog';
 import { ButtonHTMLAttributes, FC } from 'react';
 import styled from 'styled-components';
-import RefreshIcon from '../icons/refresh.svg';
-import PlusIcon from '../icons/plus.svg';
 import CrossIcon from '../icons/cross.svg';
+import PlusIcon from '../icons/plus.svg';
+import RefreshIcon from '../icons/refresh.svg';
+import { ButtonWithHover } from '../utils/style';
 import { theme } from '../utils/theme';
-import * as Dialog from '@radix-ui/react-dialog';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -34,7 +35,7 @@ const Title = styled(Dialog.Title)`
 
 const ButtonWithIcon: FC<
   { icon: string } & ButtonHTMLAttributes<HTMLButtonElement>
-> = (props) => <button {...props} />;
+> = (props) => <ButtonWithHover {...props} />;
 
 const Button = styled(ButtonWithIcon)`
   margin-top: 2rem;
@@ -50,20 +51,9 @@ const Button = styled(ButtonWithIcon)`
   background-size: 1rem;
   background-position: left 0.5rem top 50%;
   background-repeat: no-repeat;
-
-  &:active {
-    opacity: 0.8;
-  }
-
-  @media (hover: hover) {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 `;
 
-const CloseButton = styled(Dialog.Trigger)`
+const CloseButton = styled(ButtonWithHover)`
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -80,17 +70,6 @@ const CloseButton = styled(Dialog.Trigger)`
   background-size: 2rem;
   background-position: left 50% top 50%;
   background-repeat: no-repeat;
-
-  &:active {
-    opacity: 0.8;
-  }
-
-  @media (hover: hover) {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
 `;
 
 const Notice = styled.div`
@@ -133,7 +112,9 @@ export const StatisticsDialog: FC<{
               pelin.
             </Notice>
           )}
-          <CloseButton />
+          <Dialog.Close asChild>
+            <CloseButton />
+          </Dialog.Close>
         </Content>
       </Wrapper>
     </Dialog.Portal>

@@ -12,9 +12,14 @@ const Grid = styled.div`
   grid-gap: 0.5rem 0.25rem;
   max-height: 30rem;
 
-  ${onNotSmall} {
-    ${onLandscape} {
-      margin-right: 0;
+  ${onLandscape} {
+    margin: 0;
+    width: 100%;
+    max-width: 24rem;
+
+    ${onNotSmall} {
+      max-width: 28rem;
+      margin-left: auto;
     }
   }
 `;
@@ -25,14 +30,16 @@ const Box = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.25rem 0.5rem 0.125rem;
-  line-height: 1.75rem;
+  padding: 0.125rem 0.5rem;
+  line-height: 1;
   box-sizing: content-box;
   min-width: 1.75rem;
   min-height: 1.75rem;
 
   ${onNotSmall} {
-    padding: 0.375rem 1.5rem 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 2.25rem;
+    min-width: 2.25rem;
   }
 `;
 
