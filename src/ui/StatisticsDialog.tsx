@@ -6,6 +6,8 @@ import PlusIcon from '../icons/plus.svg';
 import RefreshIcon from '../icons/refresh.svg';
 import { ButtonWithHover } from '../utils/style';
 import { theme } from '../utils/theme';
+import { Statistics } from '../utils/word-to-guess';
+import { StatisticsView } from './StatisticsView';
 
 const Wrapper = styled.div`
   position: absolute;
@@ -13,10 +15,22 @@ const Wrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+`;
+
+const Overlay = styled(Dialog.Overlay)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${theme.colors.black};
+  opacity: 0.67;
 `;
 
 const Content = styled(Dialog.Content)`
@@ -27,10 +41,15 @@ const Content = styled(Dialog.Content)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 24rem;
+  max-height: 100%;
 `;
 
 const Title = styled(Dialog.Title)`
   margin: 0 0 1rem;
+  padding-right: 3rem;
 `;
 
 const ButtonWithIcon: FC<
@@ -74,7 +93,7 @@ const CloseButton = styled(ButtonWithHover)`
 
 const Notice = styled.div`
   font-size: 80%;
-  margin-top: 0.5rem;
+  margin: 0.5rem 1rem 0;
   align-self: center;
   text-align: center;
 `;
@@ -83,11 +102,13 @@ export const StatisticsDialog: FC<{
   isOpen: boolean;
   setIsOpen: (o: boolean) => void;
   status: 'win' | 'lose' | 'guess';
+  statistics: Statistics;
   newGame: () => void;
-}> = ({ isOpen, setIsOpen, status, newGame }) => (
+}> = ({ isOpen, setIsOpen, status, statistics, newGame }) => (
   <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
     <Dialog.Portal>
       <Wrapper>
+        <Overlay />
         <Content>
           <Title>
             {status === 'win'
@@ -96,7 +117,7 @@ export const StatisticsDialog: FC<{
               ? 'Pahus!'
               : 'Tilastot'}
           </Title>
-          <div>TBD</div>
+          <StatisticsView statistics={statistics} />
           <Button
             icon={status === 'guess' ? RefreshIcon : PlusIcon}
             onClick={() => {

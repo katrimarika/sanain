@@ -8,8 +8,8 @@ const StyledDiv = styled.div`
   left: 50%;
   margin-left: -8rem;
   width: 16rem;
-  background: ${theme.colors.black};
-  border: 1px solid ${theme.colors.white};
+  background: ${theme.colors.gray};
+  color: ${theme.colors.black};
   padding: 1rem;
   text-align: center;
 `;

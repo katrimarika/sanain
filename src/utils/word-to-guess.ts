@@ -14,7 +14,7 @@ const getWordToGuess = () => {
   return getRandomWord();
 };
 
-type Statistics = {
+export type Statistics = {
   totalPlayed: number;
   totalWins: number;
   totalLosses: number;
@@ -41,7 +41,7 @@ const handleCompletion = (
     totalWins: status === 'win' ? totalWins + 1 : totalWins,
     totalLosses: status === 'lose' ? totalLosses + 1 : totalLosses,
     winDistribution:
-      status === 'giveup'
+      status === 'win'
         ? {
             ...winDistribution,
             [guessCount]: (winDistribution[guessCount] ?? 0) + 1,

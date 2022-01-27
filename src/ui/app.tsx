@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/menu.svg';
 import { WORD_LENGTH } from '../utils/settings';
@@ -68,13 +68,20 @@ const MenuButton = styled(ButtonWithHover)`
 `;
 
 export const App: FC = () => {
-  const { word, guesses, submitGuess, newGame, status } = useWordToGuess();
+  const { word, guesses, submitGuess, newGame, status, statistics } =
+    useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [invalidGuess, setInvalidGuess] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
+
+  useEffect(() => {
+    if (status !== 'guess' && !statisticsOpen) {
+      setStatisticsOpen(true);
+    }
+  }, [status, statisticsOpen]);
 
   return (
     <Wrapper>
@@ -102,15 +109,16 @@ export const App: FC = () => {
               setCurrentGuess('');
             } else {
               setInvalidGuess(true);
-              setTimeout(() => setInvalidGuess(false), 3000);
+              setTimeout(() => setInvalidGuess(false), 2500);
             }
           }}
         />
         <Toast show={invalidGuess}>Sana ei löydy sanalistasta!</Toast>
         <StatisticsDialog
-          isOpen={status !== 'guess' || statisticsOpen}
+          isOpen={statisticsOpen}
           setIsOpen={setStatisticsOpen}
           status={status}
+          statistics={statistics}
           newGame={() => {
             setCurrentGuess('');
             newGame();
