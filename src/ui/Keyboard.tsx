@@ -14,10 +14,9 @@ const Container = styled.div`
   grid-template-rows: auto;
   grid-gap: 0.125rem;
   width: 100%;
-  max-width: 24rem;
+  max-width: 28rem;
 
   ${onNotSmall} {
-    max-width: 28rem;
     grid-gap: 0.25rem;
 
     ${onLandscape} {
@@ -27,6 +26,7 @@ const Container = styled.div`
 `;
 
 const Button = styled(ButtonWithHover)`
+  margin: 0;
   font-size: 1rem;
   padding: 0.5rem 0.125rem;
   font-family: ${theme.fontFamily.body};

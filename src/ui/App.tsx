@@ -1,4 +1,5 @@
 import MenuIcon from 'icons/menu.svg';
+import ReloadIcon from 'icons/reset.svg';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Keyboard } from 'ui/Keyboard';
@@ -39,7 +40,7 @@ const Main = styled.main`
   padding: 1rem 1.5rem 1.5rem;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 2fr minmax(auto, 1fr);
+  grid-template-rows: 3fr minmax(auto, 2fr);
   grid-gap: 1.5rem;
 
   ${onLandscape} {
@@ -52,20 +53,27 @@ const Main = styled.main`
   }
 `;
 
-const MenuButton = styled(ButtonWithHover)`
+const IconButton = styled(ButtonWithHover)`
   display: flex;
   padding: 0;
   width: 2rem;
   height: 2rem;
-  color: ${theme.colors.green};
   background: transparent;
   border: 0;
-  font-size: 1rem;
-  font-family: ${theme.fontFamily.body};
-  background-image: url(${MenuIcon});
-  background-size: 2rem;
   background-position: left 50% top 50%;
   background-repeat: no-repeat;
+`;
+
+const MenuButton = styled(IconButton)`
+  background-image: url(${MenuIcon});
+  background-size: 2rem;
+  margin: 0;
+`;
+
+const ReloadButton = styled(IconButton)`
+  background-image: url(${ReloadIcon});
+  background-size: 1.25rem;
+  margin: 0 0.5rem 0 auto;
 `;
 
 export const App: FC = () => {
@@ -92,6 +100,10 @@ export const App: FC = () => {
     <Wrapper>
       <Header>
         <Title>Sanain</Title>
+        <ReloadButton
+          onClick={() => window.location.reload()}
+          aria-label="Päivitä"
+        />
         <MenuButton
           onClick={() => setStatisticsOpen(true)}
           aria-label="Valikko"
