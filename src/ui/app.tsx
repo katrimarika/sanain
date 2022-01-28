@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/menu.svg';
 import { WORD_LENGTH } from '../utils/settings';
@@ -73,15 +73,10 @@ export const App: FC = () => {
   const [currentGuess, setCurrentGuess] = useState('');
   const [invalidGuess, setInvalidGuess] = useState(false);
   const [statisticsOpen, setStatisticsOpen] = useState(false);
+  const [statisticsClosed, setStatisticsClosed] = useState(false);
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
-
-  useEffect(() => {
-    if (status !== 'guess' && !statisticsOpen) {
-      setStatisticsOpen(true);
-    }
-  }, [status, statisticsOpen]);
 
   return (
     <Wrapper>
@@ -113,18 +108,22 @@ export const App: FC = () => {
             }
           }}
         />
-        <Toast show={invalidGuess}>Sana ei löydy sanalistasta!</Toast>
-        <StatisticsDialog
-          isOpen={statisticsOpen}
-          setIsOpen={setStatisticsOpen}
-          status={status}
-          statistics={statistics}
-          newGame={() => {
-            setCurrentGuess('');
-            newGame();
-          }}
-        />
       </Main>
+      <Toast show={invalidGuess}>Sana ei löydy sanalistasta!</Toast>
+      <StatisticsDialog
+        isOpen={statisticsOpen || (!statisticsClosed && status !== 'guess')}
+        close={() => {
+          setStatisticsOpen(false);
+          setStatisticsClosed(true);
+        }}
+        status={status}
+        statistics={statistics}
+        newGame={() => {
+          setCurrentGuess('');
+          setStatisticsClosed(false);
+          newGame();
+        }}
+      />
     </Wrapper>
   );
 };

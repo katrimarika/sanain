@@ -100,12 +100,12 @@ const Notice = styled.div`
 
 export const StatisticsDialog: FC<{
   isOpen: boolean;
-  setIsOpen: (o: boolean) => void;
+  close: () => void;
   status: 'win' | 'lose' | 'guess';
   statistics: Statistics;
   newGame: () => void;
-}> = ({ isOpen, setIsOpen, status, statistics, newGame }) => (
-  <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+}> = ({ isOpen, close, status, statistics, newGame }) => (
+  <Dialog.Root open={isOpen} onOpenChange={() => close()}>
     <Dialog.Portal>
       <Wrapper>
         <Overlay />
@@ -122,7 +122,7 @@ export const StatisticsDialog: FC<{
             icon={status === 'guess' ? RefreshIcon : PlusIcon}
             onClick={() => {
               newGame();
-              setIsOpen(false);
+              close();
             }}
           >
             Uusi peli
