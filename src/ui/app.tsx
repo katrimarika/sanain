@@ -1,7 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import MenuIcon from '../icons/menu.svg';
 import { WORD_LENGTH } from '../utils/settings';
+import { checkForStorage } from '../utils/storage';
 import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
 import { theme } from '../utils/theme';
 import { getHitsByLetter, getHitsForGuesses } from '../utils/word-helpers';
@@ -71,12 +72,21 @@ export const App: FC = () => {
   const { word, guesses, submitGuess, newGame, status, statistics } =
     useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
-  const [invalidGuess, setInvalidGuess] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const [statisticsOpen, setStatisticsOpen] = useState(false);
   const [statisticsClosed, setStatisticsClosed] = useState(false);
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
+
+  useEffect(() => {
+    if (!checkForStorage()) {
+      setToastMessage(
+        'Selaimen tallennus ei käytössä. Pelitilaa tai tilastoja ei pystytä säilyttämään.'
+      );
+      setTimeout(() => setToastMessage(''), 5000);
+    }
+  }, []);
 
   return (
     <Wrapper>
@@ -103,13 +113,13 @@ export const App: FC = () => {
             if (validGuess) {
               setCurrentGuess('');
             } else {
-              setInvalidGuess(true);
-              setTimeout(() => setInvalidGuess(false), 2500);
+              setToastMessage('Sana ei löydy sanalistasta.');
+              setTimeout(() => setToastMessage(''), 2500);
             }
           }}
         />
       </Main>
-      <Toast show={invalidGuess}>Sana ei löydy sanalistasta!</Toast>
+      <Toast show={!!toastMessage}>{toastMessage}</Toast>
       <StatisticsDialog
         isOpen={statisticsOpen || (!statisticsClosed && status !== 'guess')}
         close={() => {

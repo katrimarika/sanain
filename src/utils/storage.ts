@@ -1,6 +1,6 @@
 // Helpers for storage functions to do nothing if they fail
 
-export const checkForLocalStorage = () => {
+export const checkForStorage = () => {
   if (typeof localStorage === 'undefined') {
     return false;
   }
