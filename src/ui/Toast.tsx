@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { theme } from '../utils/theme';
+import { theme } from 'utils/theme';
 
 const StyledDiv = styled.div`
   position: absolute;

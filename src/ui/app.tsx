@@ -1,16 +1,16 @@
+import MenuIcon from 'icons/menu.svg';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import MenuIcon from '../icons/menu.svg';
-import { WORD_LENGTH } from '../utils/settings';
-import { checkForStorage } from '../utils/storage';
-import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
-import { theme } from '../utils/theme';
-import { getHitsByLetter, getHitsForGuesses } from '../utils/word-helpers';
-import { useWordToGuess } from '../utils/word-to-guess';
-import { Keyboard } from './Keyboard';
-import { PlayArea } from './PlayArea';
-import { StatisticsDialog } from './StatisticsDialog';
-import { Toast } from './Toast';
+import { Keyboard } from 'ui/Keyboard';
+import { PlayArea } from 'ui/PlayArea';
+import { StatisticsDialog } from 'ui/StatisticsDialog';
+import { Toast } from 'ui/Toast';
+import { WORD_LENGTH } from 'utils/settings';
+import { checkForStorage } from 'utils/storage';
+import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
+import { theme } from 'utils/theme';
+import { getHitsByLetter, getHitsForGuesses } from 'utils/word-helpers';
+import { useWordToGuess } from 'utils/word-to-guess';
 
 const Wrapper = styled.div`
   display: flex;

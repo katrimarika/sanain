@@ -1,4 +1,4 @@
-import { getHitsForGuess } from './word-helpers';
+import { getHitsForGuess } from 'utils/word-helpers';
 
 test('marks hits for "karhu" guessed against "kissa"', () => {
   expect(getHitsForGuess('kissa', 'karhu')).toStrictEqual([

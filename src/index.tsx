@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './ui/App';
-import { theme } from './utils/theme';
+import { createGlobalStyle } from 'styled-components';
+import { App } from 'ui/App';
+import { theme } from 'utils/theme';
 
 export const GlobalStyle = createGlobalStyle`
     html {

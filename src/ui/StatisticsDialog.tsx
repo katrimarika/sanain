@@ -1,13 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog';
+import CrossIcon from 'icons/cross.svg';
+import PlusIcon from 'icons/plus.svg';
+import RefreshIcon from 'icons/refresh.svg';
 import { ButtonHTMLAttributes, FC } from 'react';
 import styled from 'styled-components';
-import CrossIcon from '../icons/cross.svg';
-import PlusIcon from '../icons/plus.svg';
-import RefreshIcon from '../icons/refresh.svg';
-import { ButtonWithHover } from '../utils/style';
-import { theme } from '../utils/theme';
-import { Statistics } from '../utils/word-to-guess';
-import { StatisticsView } from './StatisticsView';
+import { StatisticsView } from 'ui/StatisticsView';
+import { ButtonWithHover } from 'utils/style';
+import { theme } from 'utils/theme';
+import { Statistics } from 'utils/word-to-guess';
 
 const Wrapper = styled.div`
   position: absolute;

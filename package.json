@@ -10,7 +10,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint ."
+    "lint": "eslint src"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^0.1.5",

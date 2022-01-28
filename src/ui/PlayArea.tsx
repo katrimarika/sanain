@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { MAX_GUESSES, WORD_LENGTH } from '../utils/settings';
-import { onLandscape, onNotSmall } from '../utils/style';
-import { theme } from '../utils/theme';
-import { Hit } from '../utils/word-helpers';
+import { MAX_GUESSES, WORD_LENGTH } from 'utils/settings';
+import { onLandscape, onNotSmall } from 'utils/style';
+import { theme } from 'utils/theme';
+import { Hit } from 'utils/word-helpers';
 
 const Grid = styled.div`
   margin: 0 auto;

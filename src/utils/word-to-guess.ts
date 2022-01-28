@@ -1,7 +1,7 @@
-import { words5 } from './words';
 import { useState } from 'react';
-import { MAX_GUESSES, WORD_LENGTH } from './settings';
-import { getDataFromStorage, storeData } from './storage';
+import { MAX_GUESSES, WORD_LENGTH } from 'utils/settings';
+import { getDataFromStorage, storeData } from 'utils/storage';
+import { words5 } from 'utils/words';
 
 const isValidWord = (wrd: string) => words5.includes(wrd);
 

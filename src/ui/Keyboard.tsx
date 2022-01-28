@@ -1,11 +1,11 @@
+import BackspaceIcon from 'icons/backspace.svg';
+import WrapIcon from 'icons/wrap.svg';
 import React, { FC, Fragment } from 'react';
 import styled from 'styled-components';
-import BackspaceIcon from '../icons/backspace.svg';
-import WrapIcon from '../icons/wrap.svg';
-import { LETTERS } from '../utils/settings';
-import { ButtonWithHover, onLandscape, onNotSmall } from '../utils/style';
-import { theme } from '../utils/theme';
-import { Hit } from '../utils/word-helpers';
+import { LETTERS } from 'utils/settings';
+import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
+import { theme } from 'utils/theme';
+import { Hit } from 'utils/word-helpers';
 
 const Container = styled.div`
   margin: 0 auto auto;

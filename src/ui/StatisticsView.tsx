@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { MAX_GUESSES } from '../utils/settings';
-import { theme } from '../utils/theme';
-import { Statistics } from '../utils/word-to-guess';
+import { MAX_GUESSES } from 'utils/settings';
+import { theme } from 'utils/theme';
+import { Statistics } from 'utils/word-to-guess';
 
 const Text = styled.p`
   margin: 0 0 0.75rem;
