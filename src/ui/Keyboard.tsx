@@ -83,12 +83,16 @@ export const Keyboard: FC<{
 }> = ({ hitsByLetter, onPress, onRemove, onSubmit }) => {
   useEffect(() => {
     const keyPressListener = (e: KeyboardEvent) => {
-      e.preventDefault();
+      if (e.altKey || e.shiftKey || e.ctrlKey || e.metaKey) {
+        return;
+      }
       if (LETTERS.includes(e.key)) {
         onPress(e.key);
       } else if (e.key === 'Enter') {
+        e.preventDefault();
         onSubmit();
       } else if (e.key === 'Backspace') {
+        e.preventDefault();
         onRemove();
       }
     };
