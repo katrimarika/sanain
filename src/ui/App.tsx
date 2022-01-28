@@ -143,6 +143,7 @@ export const App: FC = () => {
         newGame={() => {
           setCurrentGuess('');
           setStatisticsClosed(false);
+          setStatisticsOpen(false);
           newGame();
         }}
       />
