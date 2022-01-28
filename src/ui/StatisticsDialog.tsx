@@ -99,6 +99,21 @@ const Notice = styled.div`
   text-align: center;
 `;
 
+const License = styled(Notice)`
+  margin-top: 1rem;
+  color: ${theme.colors.gray};
+`;
+
+const Link = styled.a`
+  text-decoration: underline;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+`;
+
 export const StatisticsDialog: FC<{
   isOpen: boolean;
   close: () => void;
@@ -134,6 +149,17 @@ export const StatisticsDialog: FC<{
               pelin.
             </Notice>
           )}
+          <License>
+            Lisenssitiedot{' '}
+            <Link
+              href="https://github.com/katrimarika/sanain"
+              target="_blank"
+              rel="noopener noreffer"
+            >
+              GitHubissa
+            </Link>
+            .
+          </License>
           <Dialog.Close asChild>
             <CloseButton />
           </Dialog.Close>
