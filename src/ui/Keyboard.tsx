@@ -1,6 +1,6 @@
 import BackspaceIcon from 'icons/backspace.svg';
 import WrapIcon from 'icons/wrap.svg';
-import React, { FC, Fragment } from 'react';
+import React, { FC, Fragment, useEffect } from 'react';
 import styled from 'styled-components';
 import { LETTERS } from 'utils/settings';
 import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
@@ -81,6 +81,21 @@ export const Keyboard: FC<{
   onRemove: () => void;
   onSubmit: () => void;
 }> = ({ hitsByLetter, onPress, onRemove, onSubmit }) => {
+  useEffect(() => {
+    const keyPressListener = (e: KeyboardEvent) => {
+      e.preventDefault();
+      if (LETTERS.includes(e.key)) {
+        onPress(e.key);
+      } else if (e.key === 'Enter') {
+        onSubmit();
+      } else if (e.key === 'Backspace') {
+        onRemove();
+      }
+    };
+    window.addEventListener('keydown', keyPressListener);
+    return () => window.removeEventListener('keydown', keyPressListener);
+  }, [onPress, onRemove, onSubmit]);
+
   return (
     <Container>
       {LETTERS.split('').map((l, i) => (
