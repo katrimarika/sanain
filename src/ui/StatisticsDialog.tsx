@@ -37,7 +37,7 @@ const Content = styled(Dialog.Content)`
   position: relative;
   background: ${theme.colors.black};
   border: 1px solid ${theme.colors.white};
-  padding: 1rem;
+  padding: 1rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -58,6 +58,7 @@ const ButtonWithIcon: FC<
 
 const Button = styled(ButtonWithIcon)`
   margin-top: 2rem;
+  margin-bottom: 0.5rem;
   align-self: center;
   display: inline-flex;
   padding: 0.25rem 0.5rem 0.25rem 2rem;
@@ -93,7 +94,7 @@ const CloseButton = styled(ButtonWithHover)`
 
 const Notice = styled.div`
   font-size: 80%;
-  margin: 0.5rem 1rem 0;
+  margin: 0 1rem;
   align-self: center;
   text-align: center;
 `;
