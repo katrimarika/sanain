@@ -81,8 +81,7 @@ export const App: FC = () => {
     useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [toastMessage, setToastMessage] = useState('');
-  const [statisticsOpen, setStatisticsOpen] = useState(false);
-  const [statisticsClosed, setStatisticsClosed] = useState(false);
+  const [statisticsOpen, setStatisticsOpen] = useState<'open' | 'closed'>();
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
@@ -96,6 +95,12 @@ export const App: FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (status !== 'guess' && statisticsOpen === undefined) {
+      setStatisticsOpen('open');
+    }
+  }, [status, statisticsOpen]);
+
   return (
     <Wrapper>
       <Header>
@@ -105,7 +110,7 @@ export const App: FC = () => {
           aria-label="Päivitä"
         />
         <MenuButton
-          onClick={() => setStatisticsOpen(true)}
+          onClick={() => setStatisticsOpen('open')}
           aria-label="Valikko"
         />
       </Header>
@@ -133,18 +138,14 @@ export const App: FC = () => {
       </Main>
       <Toast show={!!toastMessage}>{toastMessage}</Toast>
       <StatisticsDialog
-        isOpen={statisticsOpen || (!statisticsClosed && status !== 'guess')}
-        close={() => {
-          setStatisticsOpen(false);
-          setStatisticsClosed(true);
-        }}
+        isOpen={statisticsOpen === 'open'}
+        close={() => setStatisticsOpen('closed')}
         status={status}
         statistics={statistics}
         newGame={() => {
           setCurrentGuess('');
-          setStatisticsClosed(false);
-          setStatisticsOpen(false);
           newGame();
+          setStatisticsOpen(undefined);
         }}
       />
     </Wrapper>

@@ -136,10 +136,7 @@ export const StatisticsDialog: FC<{
           <StatisticsView statistics={statistics} />
           <Button
             icon={status === 'guess' ? RefreshIcon : PlusIcon}
-            onClick={() => {
-              newGame();
-              close();
-            }}
+            onClick={() => newGame()}
           >
             Uusi peli
           </Button>
