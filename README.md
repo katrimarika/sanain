@@ -15,3 +15,9 @@ npm start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Word list
+
+The words used in the game are from [KOTUS](https://kaino.kotus.fi/sanat/nykysuomi/). The xml list itself is not included in this repository.
+
+The script `./scripts/wordlist.sh` can be used to read a content xml in the project root and generate a json list of words of the length 5.

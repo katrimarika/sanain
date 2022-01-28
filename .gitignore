@@ -25,3 +25,6 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+# words xml used to generate the word list
+kotus-sanalista_v1.xml
