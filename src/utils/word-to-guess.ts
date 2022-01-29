@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MAX_GUESSES, WORD_LENGTH } from 'utils/settings';
+import { LETTERS, MAX_GUESSES, WORD_LENGTH } from 'utils/settings';
 import { getDataFromStorage, storeData } from 'utils/storage';
 import { words5 } from 'utils/words';
 
@@ -7,23 +7,32 @@ const isValidWord = (wrd: string) => words5.includes(wrd);
 
 const getRandomWordIndex = () => Math.floor(Math.random() * words5.length);
 
-const wordStorageKey = 'sanain-current';
+const wordStorageKey = 'sanain-word';
 const getWordToGuess = (options: { forceNew?: boolean } = {}) => {
   if (!options?.forceNew) {
     const storedData = getDataFromStorage(wordStorageKey);
     if (storedData) {
-      const storedIndex = parseInt(storedData, 10);
-      if (!isNaN(storedIndex)) {
-        const word = words5[storedIndex];
-        if (word) {
-          return word;
+      try {
+        const decoded = atob(storedData);
+        if (
+          decoded.length === WORD_LENGTH &&
+          decoded.split('').filter((d) => LETTERS.includes(d)).length ===
+            WORD_LENGTH
+        ) {
+          return decoded;
         }
+      } catch (e) {
+        // no-op
       }
     }
   }
   const newWordIndex = getRandomWordIndex();
   const word = words5[newWordIndex];
-  storeData(wordStorageKey, `${newWordIndex}`);
+  try {
+    storeData(wordStorageKey, btoa(word));
+  } catch (e) {
+    // no-op
+  }
 
   return word;
 };
@@ -109,7 +118,7 @@ const handleCompletion = (
 
 export const useWordToGuess = () => {
   const [word, setWord] = useState(getWordToGuess());
-  const [guesses, setGuesses] = useState<string[]>(getGuesses());
+  const [guesses, setGuesses] = useState<string[]>(word ? getGuesses() : []);
   const [statistics, setStatistics] = useState(getStatistics());
 
   const status =
