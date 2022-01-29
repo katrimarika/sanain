@@ -58,9 +58,9 @@ const Button = styled(ButtonWithHover)`
   align-self: center;
   display: inline-flex;
   padding: 0.25rem 0.5rem 0.25rem 2rem;
-  color: ${theme.colors.green};
+  color: ${theme.colors.highlight};
   background: transparent;
-  border: 1px solid ${theme.colors.green};
+  border: 1px solid ${theme.colors.highlight};
   font-size: 1.25rem;
   font-family: ${theme.fontFamily.body};
   background-image: url(${PlusIcon});
@@ -88,11 +88,9 @@ const CloseButton = styled(ButtonWithHover)`
   padding: 0;
   width: 2.5rem;
   height: 2.5rem;
-  color: ${theme.colors.green};
   background: transparent;
   border: 0;
   font-size: 1rem;
-  font-family: ${theme.fontFamily.body};
   background-image: url(${CrossIcon});
   background-size: 2rem;
   background-position: left 50% top 50%;
@@ -129,10 +127,11 @@ export const StatisticsDialog: FC<{
   isOpen: boolean;
   close: () => void;
   status: 'win' | 'lose' | 'guess';
+  guessCount: number;
   word: string;
   statistics: Statistics;
   newGame: () => void;
-}> = ({ isOpen, close, status, word, statistics, newGame }) => (
+}> = ({ isOpen, close, status, guessCount, word, statistics, newGame }) => (
   <Dialog.Root open={isOpen} onOpenChange={() => close()}>
     <Dialog.Portal>
       <Wrapper>
@@ -140,7 +139,7 @@ export const StatisticsDialog: FC<{
         <Content>
           <Title>
             {status === 'win'
-              ? 'Onneksi olkoon!'
+              ? 'Oikein!'
               : status === 'lose'
               ? 'Pahus!'
               : 'Tilastot'}
@@ -148,11 +147,11 @@ export const StatisticsDialog: FC<{
           {status === 'lose' && (
             <Text>{`Oikea vastaus olisi ollut "${word}".`}</Text>
           )}
-          <StatisticsView statistics={statistics} />
-          <ButtonWithIcon
-            refreshIcon={status === 'guess'}
-            onClick={() => newGame()}
-          >
+          <StatisticsView
+            statistics={statistics}
+            currenWinGuessCount={status === 'win' ? guessCount : undefined}
+          />
+          <ButtonWithIcon refreshIcon={status === 'guess'} onClick={newGame}>
             Uusi peli
           </ButtonWithIcon>
           {status === 'guess' && (

@@ -77,29 +77,32 @@ const SubmitButton = styled(IconButton)`
 `;
 
 export const Keyboard: FC<{
+  captureKeyPresses: boolean;
   hitsByLetter: { [key: string]: Hit };
   onPress: (l: string) => void;
   onRemove: () => void;
   onSubmit: () => void;
-}> = ({ hitsByLetter, onPress, onRemove, onSubmit }) => {
+}> = ({ captureKeyPresses, hitsByLetter, onPress, onRemove, onSubmit }) => {
   useEffect(() => {
-    const keyPressListener = (e: KeyboardEvent) => {
-      if (e.altKey || e.shiftKey || e.ctrlKey || e.metaKey) {
-        return;
-      }
-      if (LETTERS.includes(e.key)) {
-        onPress(e.key);
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        onSubmit();
-      } else if (e.key === 'Backspace') {
-        e.preventDefault();
-        onRemove();
-      }
-    };
-    window.addEventListener('keydown', keyPressListener);
-    return () => window.removeEventListener('keydown', keyPressListener);
-  }, [onPress, onRemove, onSubmit]);
+    if (captureKeyPresses) {
+      const keyPressListener = (e: KeyboardEvent) => {
+        if (e.altKey || e.shiftKey || e.ctrlKey || e.metaKey) {
+          return;
+        }
+        if (LETTERS.includes(e.key)) {
+          onPress(e.key);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          onSubmit();
+        } else if (e.key === 'Backspace') {
+          e.preventDefault();
+          onRemove();
+        }
+      };
+      window.addEventListener('keydown', keyPressListener);
+      return () => window.removeEventListener('keydown', keyPressListener);
+    }
+  }, [captureKeyPresses, onPress, onRemove, onSubmit]);
 
   return (
     <Container>

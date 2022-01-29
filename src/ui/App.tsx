@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 
 const Header = styled.header`
   padding: 0 1.5rem;
-  border-bottom: 2px solid ${theme.colors.green};
+  border-bottom: 2px solid ${theme.colors.highlight};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,7 +86,8 @@ export const App: FC = () => {
     useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [toastMessage, setToastMessage] = useState('');
-  const [statisticsOpen, setStatisticsOpen] = useState<'open' | 'closed'>();
+  const [statsDialogOpen, setStatsDialogOpen] = useState(false);
+  const [endDialogClosed, setEndDialogClosed] = useState(false);
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
@@ -100,12 +101,6 @@ export const App: FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (status !== 'guess' && statisticsOpen === undefined) {
-      setStatisticsOpen('open');
-    }
-  }, [status, statisticsOpen]);
-
   return (
     <Wrapper>
       <Header>
@@ -115,7 +110,13 @@ export const App: FC = () => {
           aria-label="Päivitä sivu"
         />
         <MenuButton
-          onClick={() => setStatisticsOpen('open')}
+          onClick={() => {
+            if (status === 'guess') {
+              setStatsDialogOpen(true);
+            } else {
+              setEndDialogClosed(false);
+            }
+          }}
           aria-label="Valikko"
         />
       </Header>
@@ -127,6 +128,7 @@ export const App: FC = () => {
           status={status}
         />
         <Keyboard
+          captureKeyPresses={status === 'guess' && !statsDialogOpen}
           hitsByLetter={hitsByLetter}
           onPress={(l) =>
             setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
@@ -148,14 +150,22 @@ export const App: FC = () => {
       </Main>
       <Toast show={!!toastMessage}>{toastMessage}</Toast>
       <StatisticsDialog
-        isOpen={statisticsOpen === 'open'}
-        close={() => setStatisticsOpen('closed')}
+        isOpen={status === 'guess' ? statsDialogOpen : !endDialogClosed}
+        close={() => {
+          if (status === 'guess') {
+            setStatsDialogOpen(false);
+          } else {
+            setEndDialogClosed(true);
+          }
+        }}
         status={status}
+        guessCount={guesses.length}
         word={word}
         statistics={statistics}
         newGame={() => {
           newGame();
-          setStatisticsOpen(undefined);
+          setStatsDialogOpen(false);
+          setEndDialogClosed(false);
         }}
       />
     </Wrapper>

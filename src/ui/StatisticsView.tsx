@@ -37,8 +37,12 @@ const Bar = styled.div`
   }
 `;
 
-export const StatisticsView: FC<{ statistics: Statistics }> = ({
+export const StatisticsView: FC<{
+  statistics: Statistics;
+  currenWinGuessCount?: number;
+}> = ({
   statistics: { totalPlayed, totalWins, totalLosses, winDistribution },
+  currenWinGuessCount,
 }) => {
   const biggestWinCount =
     Object.values(winDistribution).sort((a, b) => b - a)[0] || 1;
@@ -57,6 +61,7 @@ export const StatisticsView: FC<{ statistics: Statistics }> = ({
                   ((winDistribution[i + 1] || 0.01) / biggestWinCount) * 100
                 }px`,
               }}
+              className={currenWinGuessCount === i + 1 ? 'latest' : undefined}
             />
             <div>{i + 1}</div>
           </BarContainer>

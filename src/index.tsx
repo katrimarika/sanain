@@ -43,7 +43,7 @@ export const GlobalStyle = createGlobalStyle`
 
     a:focus,
     button:focus {
-      outline: 2px solid ${theme.colors.green};
+      outline: 2px solid ${theme.colors.highlight};
     }
 
     a:focus:not(:focus-visible),
@@ -53,7 +53,7 @@ export const GlobalStyle = createGlobalStyle`
 
     a:focus-visible,
     button:focus-visible {
-      outline: 2px solid ${theme.colors.green};
+      outline: 2px solid ${theme.colors.highlight};
     }
 `;
 

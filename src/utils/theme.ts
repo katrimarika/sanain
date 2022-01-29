@@ -3,7 +3,9 @@ export const theme = {
     black: '#000010',
     white: '#fffffd',
 
-    // Highlight
+    highlight: '#1278ff',
+
+    // Correct
     green: '#00bb00',
 
     // Dim
