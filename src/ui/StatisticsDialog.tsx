@@ -52,11 +52,7 @@ const Title = styled(Dialog.Title)`
   padding-right: 3rem;
 `;
 
-const ButtonWithIcon: FC<
-  { icon: string } & ButtonHTMLAttributes<HTMLButtonElement>
-> = (props) => <ButtonWithHover {...props} />;
-
-const Button = styled(ButtonWithIcon)`
+const Button = styled(ButtonWithHover)`
   margin-top: 2rem;
   margin-bottom: 0.5rem;
   align-self: center;
@@ -67,11 +63,22 @@ const Button = styled(ButtonWithIcon)`
   border: 1px solid ${theme.colors.green};
   font-size: 1.25rem;
   font-family: ${theme.fontFamily.body};
-  background-image: url(${(props) => props.icon});
-  background-size: 1rem;
-  background-position: left 0.5rem top 50%;
+  background-image: url(${PlusIcon});
+  background-size: 1.5rem;
+  background-position: left 0.375rem top 50%;
   background-repeat: no-repeat;
 `;
+
+const RefreshButton = styled(Button)`
+  background-image: url(${RefreshIcon});
+  background-size: 1rem;
+  background-position: left 0.5rem top 50%;
+`;
+
+const ButtonWithIcon: FC<
+  { refreshIcon?: boolean } & ButtonHTMLAttributes<HTMLButtonElement>
+> = (props) =>
+  props.refreshIcon ? <RefreshButton {...props} /> : <Button {...props} />;
 
 const CloseButton = styled(ButtonWithHover)`
   position: absolute;
@@ -90,6 +97,10 @@ const CloseButton = styled(ButtonWithHover)`
   background-size: 2rem;
   background-position: left 50% top 50%;
   background-repeat: no-repeat;
+`;
+
+const Text = styled.p`
+  margin: 0 0 1rem;
 `;
 
 const Notice = styled.div`
@@ -118,9 +129,10 @@ export const StatisticsDialog: FC<{
   isOpen: boolean;
   close: () => void;
   status: 'win' | 'lose' | 'guess';
+  word: string;
   statistics: Statistics;
   newGame: () => void;
-}> = ({ isOpen, close, status, statistics, newGame }) => (
+}> = ({ isOpen, close, status, word, statistics, newGame }) => (
   <Dialog.Root open={isOpen} onOpenChange={() => close()}>
     <Dialog.Portal>
       <Wrapper>
@@ -133,13 +145,16 @@ export const StatisticsDialog: FC<{
               ? 'Pahus!'
               : 'Tilastot'}
           </Title>
+          {status === 'lose' && (
+            <Text>{`Oikea vastaus olisi ollut "${word}".`}</Text>
+          )}
           <StatisticsView statistics={statistics} />
-          <Button
-            icon={status === 'guess' ? RefreshIcon : PlusIcon}
+          <ButtonWithIcon
+            refreshIcon={status === 'guess'}
             onClick={() => newGame()}
           >
             Uusi peli
-          </Button>
+          </ButtonWithIcon>
           {status === 'guess' && (
             <Notice>
               Huom! Keskeneräinen peli merkitään luovutetuksi, jos aloitat uuden

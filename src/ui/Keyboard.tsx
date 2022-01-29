@@ -12,14 +12,14 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: auto;
-  grid-gap: 0.125rem;
+  grid-gap: 0.25rem;
   width: 100%;
   max-width: 28rem;
 
-  ${onNotSmall} {
-    grid-gap: 0.25rem;
+  ${onLandscape} {
+    padding-right: 0.75rem;
 
-    ${onLandscape} {
+    ${onNotSmall} {
       margin-left: 0;
     }
   }
@@ -28,13 +28,14 @@ const Container = styled.div`
 const Button = styled(ButtonWithHover)`
   margin: 0;
   font-size: 1rem;
-  padding: 0.5rem 0.125rem;
+  padding: 0.75rem 0.125rem;
   font-family: ${theme.fontFamily.body};
   text-transform: uppercase;
   color: ${theme.colors.black};
   background: ${theme.colors.white};
   border: 0;
   border-radius: 0.125rem;
+  user-select: none;
 
   ${onNotSmall} {
     padding: 0.75rem 0.25rem;

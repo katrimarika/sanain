@@ -37,19 +37,24 @@ const Main = styled.main`
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;
-  padding: 1rem 1.5rem 1.5rem;
+  padding: 1rem 0.75rem 1.5rem;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3fr minmax(auto, 2fr);
-  grid-gap: 1.5rem;
+  grid-template-rows: auto minmax(auto, 50%);
+  grid-gap: 2rem 0.75rem;
 
   ${onLandscape} {
-    grid-template-columns: 1fr minmax(auto, 1fr);
-    grid-template-rows: 1fr;
+    grid-template-columns: auto minmax(auto, 60%);
+    grid-auto-rows: auto;
 
     ${onNotSmall} {
-      grid-column-gap: 2rem;
+      grid-template-columns: minmax(auto, 50%) minmax(auto, 60%);
     }
+  }
+
+  ${onNotSmall} {
+    padding-top: 2rem;
+    grid-gap: 4rem 1.5rem;
   }
 `;
 
@@ -107,7 +112,7 @@ export const App: FC = () => {
         <Title>Sanain</Title>
         <ReloadButton
           onClick={() => window.location.reload()}
-          aria-label="Päivitä"
+          aria-label="Päivitä sivu"
         />
         <MenuButton
           onClick={() => setStatisticsOpen('open')}
@@ -115,7 +120,12 @@ export const App: FC = () => {
         />
       </Header>
       <Main>
-        <PlayArea hits={hits} guesses={guesses} currentGuess={currentGuess} />
+        <PlayArea
+          hits={hits}
+          guesses={guesses}
+          currentGuess={currentGuess}
+          status={status}
+        />
         <Keyboard
           hitsByLetter={hitsByLetter}
           onPress={(l) =>
@@ -141,9 +151,9 @@ export const App: FC = () => {
         isOpen={statisticsOpen === 'open'}
         close={() => setStatisticsOpen('closed')}
         status={status}
+        word={word}
         statistics={statistics}
         newGame={() => {
-          setCurrentGuess('');
           newGame();
           setStatisticsOpen(undefined);
         }}
