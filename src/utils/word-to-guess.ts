@@ -166,7 +166,7 @@ export const useWordToGuess = () => {
       updateGuesses(newGuesses);
       const newStats = handleCompletion('win', currentGuessCount);
       setStatistics(newStats);
-      return true;
+      return 'win';
     }
 
     if (isValidWord(g)) {

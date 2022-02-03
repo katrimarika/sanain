@@ -12,6 +12,7 @@ import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 import { getHitsByLetter, getHitsForGuesses } from 'utils/word-helpers';
 import { useWordToGuess } from 'utils/word-to-guess';
+import { GameEndDialog } from './GameEndDialog';
 import { InfoDialog } from './InfoDialog';
 
 const Wrapper = styled.div`
@@ -96,7 +97,7 @@ export const App: FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const [statsDialogOpen, setStatsDialogOpen] = useState(false);
-  const [endDialogClosed, setEndDialogClosed] = useState(false);
+  const [endDialogOpen, setEndDialogOpen] = useState(false);
 
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
@@ -110,19 +111,19 @@ export const App: FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (status !== 'guess') {
+      setTimeout(() => setEndDialogOpen(true), 500);
+    }
+  }, [status]);
+
   return (
     <Wrapper>
       <Header>
         <Title>Sanain</Title>
         <InfoButton onClick={() => setInfoDialogOpen(true)} aria-label="Info" />
         <MenuButton
-          onClick={() => {
-            if (status === 'guess') {
-              setStatsDialogOpen(true);
-            } else {
-              setEndDialogClosed(false);
-            }
-          }}
+          onClick={() => setStatsDialogOpen(true)}
           aria-label="Valikko"
         />
       </Header>
@@ -138,11 +139,16 @@ export const App: FC = () => {
             status === 'guess' && !statsDialogOpen && !infoDialogOpen
           }
           hitsByLetter={hitsByLetter}
-          onPress={(l) =>
-            setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
-          }
+          onPress={(l) => {
+            if (status === 'guess') {
+              setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g));
+            }
+          }}
           onRemove={() => setCurrentGuess((g) => g.slice(0, g.length - 1))}
           onSubmit={() => {
+            if (status !== 'guess' && !endDialogOpen) {
+              setEndDialogOpen(true);
+            }
             if (currentGuess.length < WORD_LENGTH) {
               return;
             }
@@ -157,23 +163,28 @@ export const App: FC = () => {
         />
       </Main>
       <Toast show={!!toastMessage}>{toastMessage}</Toast>
+      {status !== 'guess' && (
+        <GameEndDialog
+          isOpen={endDialogOpen}
+          close={() => setEndDialogOpen(false)}
+          status={status}
+          guessCount={guesses.length}
+          word={word}
+          statistics={statistics}
+          newGame={() => {
+            newGame();
+            setEndDialogOpen(false);
+          }}
+        />
+      )}
       <StatisticsDialog
-        isOpen={status === 'guess' ? statsDialogOpen : !endDialogClosed}
-        close={() => {
-          if (status === 'guess') {
-            setStatsDialogOpen(false);
-          } else {
-            setEndDialogClosed(true);
-          }
-        }}
-        status={status}
-        guessCount={guesses.length}
-        word={word}
+        isOpen={statsDialogOpen}
+        close={() => setStatsDialogOpen(false)}
+        showNotice={status === 'guess'}
         statistics={statistics}
         newGame={() => {
           newGame();
           setStatsDialogOpen(false);
-          setEndDialogClosed(false);
         }}
       />
       <InfoDialog
