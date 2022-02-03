@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { LETTERS, MAX_GUESSES, WORD_LENGTH } from 'utils/settings';
-import { getDataFromStorage, storeData } from 'utils/storage';
+import {
+  getDataFromStorage,
+  removeDataFromStorage,
+  storeData,
+} from 'utils/storage';
 import { words5 } from 'utils/words';
 
 const isValidWord = (wrd: string) => words5.includes(wrd);
@@ -115,6 +119,9 @@ const handleCompletion = (
   storeData(statisticsStorageKey, JSON.stringify(newStatistics));
   return newStatistics;
 };
+const resetStoredStatistics = () => {
+  removeDataFromStorage(statisticsStorageKey);
+};
 
 export const useWordToGuess = () => {
   const [word, setWord] = useState(getWordToGuess());
@@ -135,6 +142,7 @@ export const useWordToGuess = () => {
     guesses,
     submitGuess,
     newGame,
+    resetStatistics,
   };
 
   function updateGuesses(gs: string[]) {
@@ -181,5 +189,15 @@ export const useWordToGuess = () => {
     }
     setWord(getWordToGuess({ forceNew: true }));
     updateGuesses([]);
+  }
+
+  function resetStatistics() {
+    setStatistics({
+      totalPlayed: 0,
+      totalWins: 0,
+      totalLosses: 0,
+      winDistribution: {},
+    });
+    resetStoredStatistics();
   }
 };

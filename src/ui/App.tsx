@@ -83,8 +83,15 @@ const InfoButton = styled(IconButton)`
 `;
 
 export const App: FC = () => {
-  const { word, guesses, submitGuess, newGame, status, statistics } =
-    useWordToGuess();
+  const {
+    word,
+    guesses,
+    submitGuess,
+    newGame,
+    status,
+    statistics,
+    resetStatistics,
+  } = useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -172,6 +179,7 @@ export const App: FC = () => {
       <InfoDialog
         isOpen={infoDialogOpen}
         close={() => setInfoDialogOpen(false)}
+        resetStatistics={resetStatistics}
       />
     </Wrapper>
   );

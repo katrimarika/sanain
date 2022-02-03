@@ -32,3 +32,11 @@ export const getDataFromStorage = (key: string) => {
     return null;
   }
 };
+
+export const removeDataFromStorage = (key: string) => {
+  try {
+    localStorage.removeItem(key);
+  } catch (e) {
+    // no-op
+  }
+};

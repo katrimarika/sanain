@@ -1,4 +1,5 @@
-import ReloadIcon from 'icons/reset.svg';
+import ReloadIcon from 'icons/reload.svg';
+import ResetIcon from 'icons/reset.svg';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ButtonWithHover } from 'utils/style';
@@ -18,6 +19,10 @@ const Place = styled.span`
   color: ${theme.colors.secondaryHighlight};
 `;
 
+const Dim = styled.span`
+  color: ${theme.colors.gray};
+`;
+
 const ReloadButton = styled(ButtonWithHover)`
   margin-top: 1rem;
   display: inline-flex;
@@ -31,6 +36,11 @@ const ReloadButton = styled(ButtonWithHover)`
   background-size: 1rem;
   background-position: left 0 top 50%;
   background-repeat: no-repeat;
+`;
+
+const ResetButton = styled(ReloadButton)`
+  background-image: url(${ResetIcon});
+  margin-left: 1.5rem;
 `;
 
 const License = styled.div`
@@ -48,11 +58,13 @@ const Link = styled.a`
   }
 `;
 
-export const InfoDialog: FC<{ isOpen: boolean; close: () => void }> = (
-  props
-) => {
+export const InfoDialog: FC<{
+  isOpen: boolean;
+  close: () => void;
+  resetStatistics: () => void;
+}> = ({ resetStatistics, ...rest }) => {
   return (
-    <Dialog title="Info" {...props}>
+    <Dialog title="Info" {...rest}>
       <Text>
         Pelin tavoitteena on keksiä valittu viisikirjaiminen suomenkielinen
         sana. Yrityksiä on kuusi ja kirjaimia voi syöttää ruudulla olevilla
@@ -61,11 +73,15 @@ export const InfoDialog: FC<{ isOpen: boolean; close: () => void }> = (
       <Text>
         <Hit>Sinisellä</Hit> merkitty kirjain on oikealla paikalla.{' '}
         <Place>Oranssilla</Place> merkitty kirjain löytyy sanasta, mutta eri
-        kohdasta.
+        kohdasta. <Dim>Harmaalla</Dim> merkitty kirjain ei löydy sanasta
+        ollenkaan.
       </Text>
-      <ReloadButton onClick={() => window.location.reload()}>
-        Päivitä sivu
-      </ReloadButton>
+      <div>
+        <ReloadButton onClick={() => window.location.reload()}>
+          Päivitä sivu
+        </ReloadButton>
+        <ResetButton onClick={resetStatistics}>Nollaa tilastot</ResetButton>
+      </div>
       <License>
         Lisenssitiedot{' '}
         <Link
