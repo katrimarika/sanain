@@ -17,7 +17,7 @@ const Container = styled.div`
   max-width: 28rem;
 
   ${onLandscape} {
-    padding-right: 0.75rem;
+    padding-right: 1.25rem;
 
     ${onNotSmall} {
       margin-left: 0;
@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const Button = styled(ButtonWithHover)`
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.25rem;
   padding: 0.75rem 0.125rem;
   font-family: ${theme.fontFamily.body};
   text-transform: uppercase;
@@ -45,11 +45,11 @@ const Button = styled(ButtonWithHover)`
   }
 
   &.hit {
-    background-color: ${theme.colors.green};
+    background-color: ${theme.colors.highlight};
   }
 
   &.place {
-    background-color: ${theme.colors.yellow};
+    background-color: ${theme.colors.secondaryHighlight};
   }
 
   &.miss {

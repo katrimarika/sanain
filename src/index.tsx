@@ -16,7 +16,6 @@ export const GlobalStyle = createGlobalStyle`
     body {
       padding: 0;
       margin: 0;
-      line-height: 1.3;
     }
 
     a {
@@ -38,7 +37,8 @@ export const GlobalStyle = createGlobalStyle`
       color: ${theme.colors.white};
       font-family: ${theme.fontFamily.body};
       font-weight: normal;
-      font-size: 1.125rem;
+      font-size: 1rem;
+      line-height: 1.3;
     }
 
     a:focus,

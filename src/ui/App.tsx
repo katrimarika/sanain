@@ -1,5 +1,5 @@
-import MenuIcon from 'icons/menu.svg';
-import ReloadIcon from 'icons/reset.svg';
+import GraphIcon from 'icons/graph.svg';
+import InfoIcon from 'icons/info.svg';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Keyboard } from 'ui/Keyboard';
@@ -12,6 +12,7 @@ import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 import { getHitsByLetter, getHitsForGuesses } from 'utils/word-helpers';
 import { useWordToGuess } from 'utils/word-to-guess';
+import { InfoDialog } from './InfoDialog';
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,11 +38,11 @@ const Main = styled.main`
   margin: 0 auto;
   flex-grow: 1;
   width: 100%;
-  padding: 1rem 0.75rem 1.5rem;
+  padding: 1rem 0.25rem 1.5rem;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto minmax(auto, 50%);
-  grid-gap: 2rem 0.75rem;
+  grid-gap: 2rem 0.25rem;
 
   ${onLandscape} {
     grid-template-columns: auto minmax(auto, 60%);
@@ -54,7 +55,7 @@ const Main = styled.main`
 
   ${onNotSmall} {
     padding-top: 2rem;
-    grid-gap: 4rem 1.5rem;
+    grid-gap: 4rem 0.75rem;
   }
 `;
 
@@ -70,14 +71,14 @@ const IconButton = styled(ButtonWithHover)`
 `;
 
 const MenuButton = styled(IconButton)`
-  background-image: url(${MenuIcon});
+  background-image: url(${GraphIcon});
   background-size: 2rem;
   margin: 0;
 `;
 
-const ReloadButton = styled(IconButton)`
-  background-image: url(${ReloadIcon});
-  background-size: 1.25rem;
+const InfoButton = styled(IconButton)`
+  background-image: url(${InfoIcon});
+  background-size: 1.75rem;
   margin: 0 0.5rem 0 auto;
 `;
 
@@ -86,6 +87,7 @@ export const App: FC = () => {
     useWordToGuess();
   const [currentGuess, setCurrentGuess] = useState('');
   const [toastMessage, setToastMessage] = useState('');
+  const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const [statsDialogOpen, setStatsDialogOpen] = useState(false);
   const [endDialogClosed, setEndDialogClosed] = useState(false);
 
@@ -105,10 +107,7 @@ export const App: FC = () => {
     <Wrapper>
       <Header>
         <Title>Sanain</Title>
-        <ReloadButton
-          onClick={() => window.location.reload()}
-          aria-label="Päivitä sivu"
-        />
+        <InfoButton onClick={() => setInfoDialogOpen(true)} aria-label="Info" />
         <MenuButton
           onClick={() => {
             if (status === 'guess') {
@@ -128,7 +127,9 @@ export const App: FC = () => {
           status={status}
         />
         <Keyboard
-          captureKeyPresses={status === 'guess' && !statsDialogOpen}
+          captureKeyPresses={
+            status === 'guess' && !statsDialogOpen && !infoDialogOpen
+          }
           hitsByLetter={hitsByLetter}
           onPress={(l) =>
             setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g))
@@ -167,6 +168,10 @@ export const App: FC = () => {
           setStatsDialogOpen(false);
           setEndDialogClosed(false);
         }}
+      />
+      <InfoDialog
+        isOpen={infoDialogOpen}
+        close={() => setInfoDialogOpen(false)}
       />
     </Wrapper>
   );

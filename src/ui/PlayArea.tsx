@@ -7,7 +7,7 @@ import { Hit } from 'utils/word-helpers';
 
 const Grid = styled.div`
   margin: 0 auto;
-  padding: 0 0.75rem;
+  padding: 0 1.25rem;
   display: grid;
   grid-template-columns: repeat(${WORD_LENGTH}, 1fr);
   grid-template-rows: repeat(${MAX_GUESSES}, 1fr);
@@ -46,11 +46,12 @@ const Box = styled.div`
   }
 
   &.hit {
-    color: ${theme.colors.green};
+    color: ${theme.colors.highlight};
+    border-color: ${theme.colors.highlight};
   }
 
   &.place {
-    color: ${theme.colors.yellow};
+    color: ${theme.colors.secondaryHighlight};
   }
 
   &.miss {
@@ -76,10 +77,7 @@ export const PlayArea: FC<{
           <Box
             key={`box-${i}-${j}`}
             className={`${rowHits[j]}${
-              (status === 'guess' && showCurrent) ||
-              (status === 'win' && i === guesses.length - 1)
-                ? ' active'
-                : ''
+              status === 'guess' && showCurrent ? ' active' : ''
             }`}
           >
             {rowGuess ? rowGuess[j] : showCurrent ? currentGuess[j] || '' : ''}

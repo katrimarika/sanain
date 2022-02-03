@@ -33,7 +33,7 @@ const Bar = styled.div`
   background-color: ${theme.colors.gray};
 
   &.latest {
-    background-color: ${theme.colors.green};
+    background-color: ${theme.colors.highlight};
   }
 `;
 
