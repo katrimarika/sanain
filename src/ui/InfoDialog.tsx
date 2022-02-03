@@ -62,9 +62,9 @@ export const InfoDialog: FC<{
   isOpen: boolean;
   close: () => void;
   resetStatistics: () => void;
-}> = ({ resetStatistics, ...rest }) => {
+}> = ({ isOpen, close, resetStatistics }) => {
   return (
-    <Dialog title="Info" {...rest}>
+    <Dialog title="Info" isOpen={isOpen} close={close}>
       <Text>
         Pelin tavoitteena on keksiä valittu viisikirjaiminen suomenkielinen
         sana. Yrityksiä on kuusi ja kirjaimia voi syöttää ruudulla olevilla
@@ -80,7 +80,14 @@ export const InfoDialog: FC<{
         <ReloadButton onClick={() => window.location.reload()}>
           Päivitä sivu
         </ReloadButton>
-        <ResetButton onClick={resetStatistics}>Nollaa tilastot</ResetButton>
+        <ResetButton
+          onClick={() => {
+            resetStatistics();
+            close();
+          }}
+        >
+          Nollaa tilastot
+        </ResetButton>
       </div>
       <License>
         Lisenssitiedot{' '}

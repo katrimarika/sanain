@@ -157,7 +157,7 @@ export const App: FC = () => {
               setCurrentGuess('');
             } else {
               setToastMessage('Sana ei löydy sanalistasta.');
-              setTimeout(() => setToastMessage(''), 2500);
+              setTimeout(() => setToastMessage(''), 1000);
             }
           }}
         />
