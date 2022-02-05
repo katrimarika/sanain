@@ -74,6 +74,7 @@ const BackspaceButton = styled(IconButton)`
 const SubmitButton = styled(IconButton)`
   background-image: url(${WrapIcon});
   transform: rotate(180deg);
+  grid-column: 10 / 12;
 `;
 
 export const Keyboard: FC<{
@@ -108,14 +109,18 @@ export const Keyboard: FC<{
     <Container>
       {LETTERS.split('').map((l, i) => (
         <Fragment key={`lttr-${l}`}>
-          {i === 2 * 11 && <div />}
+          {i === 21 && <div />}
           <Button className={hitsByLetter[l]} onClick={() => onPress(l)}>
             {l}
           </Button>
+          {i === 9 && (
+            <BackspaceButton
+              arial-label="Poista merkki"
+              onClick={() => onRemove()}
+            />
+          )}
         </Fragment>
       ))}
-      <div />
-      <BackspaceButton arial-label="Poista merkki" onClick={() => onRemove()} />
       <SubmitButton aria-label="Vahvista" onClick={() => onSubmit()} />
     </Container>
   );
