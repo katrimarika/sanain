@@ -1,11 +1,16 @@
-import React, { FC, Fragment } from 'react';
+import * as RadioGroup from '@radix-ui/react-radio-group';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { SettingsState } from 'utils/settings';
-import * as RadioGroup from '@radix-ui/react-radio-group';
 import { theme } from 'utils/theme';
+
+const Container = styled.div`
+  margin-bottom: auto;
+`;
 
 const Title = styled.h3`
   font-size: 1.25rem;
+  margin: 1rem 0;
 `;
 
 const Setting = styled.div`
@@ -46,10 +51,10 @@ export const Settings: FC<SettingsState> = ({
   onlyNativeKeyboard,
   setOnlyNativeKeyboard,
 }) => (
-  <Fragment>
+  <Container>
     <Title>Asetukset</Title>
     <Setting>
-      <Label id="only-native-keyboard-label">Näppäimistö</Label>
+      <Label id="only-native-keyboard-label">Näppäimistö ruudulla</Label>
       <RadioGroup.Root
         aria-labelledby="only-native-keyboard-label"
         name="only-native-keyboard"
@@ -57,14 +62,14 @@ export const Settings: FC<SettingsState> = ({
         onValueChange={(v) => setOnlyNativeKeyboard(v === 'true')}
       >
         <StyledRadio value="false">
-          <span>Ruudulla</span>
+          <span>Kyllä</span>
           <StyledIndicator />
         </StyledRadio>
         <StyledRadio value="true">
-          <span>Natiivi</span>
+          <span>Ei</span>
           <StyledIndicator />
         </StyledRadio>
       </RadioGroup.Root>
     </Setting>
-  </Fragment>
+  </Container>
 );
