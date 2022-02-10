@@ -3,26 +3,15 @@ import WrapIcon from 'icons/wrap.svg';
 import React, { FC, Fragment, useEffect } from 'react';
 import styled from 'styled-components';
 import { LETTERS } from 'utils/settings';
-import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
+import { ButtonWithHover, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 import { Hit } from 'utils/word-helpers';
 
 const Container = styled.div`
-  margin: 0 auto auto;
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: auto;
   grid-gap: 0.25rem;
-  width: 100%;
-  max-width: 28rem;
-
-  ${onLandscape} {
-    padding-right: 1.25rem;
-
-    ${onNotSmall} {
-      margin-left: 0;
-    }
-  }
 `;
 
 const Button = styled(ButtonWithHover)`

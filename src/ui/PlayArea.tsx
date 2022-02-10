@@ -14,7 +14,7 @@ const Grid = styled.div`
   grid-gap: 0.5rem 0.75rem;
 
   ${onLandscape} {
-    margin: 0 0 auto auto;
+    margin-bottom: auto;
   }
 
   ${onNotSmall} {
@@ -62,9 +62,10 @@ const Box = styled.div`
 export const PlayArea: FC<{
   guesses: string[];
   hits: Hit[][];
+  hitsByLetter: { [key: string]: Hit };
   currentGuess: string;
   status: 'win' | 'lose' | 'guess';
-}> = ({ guesses, hits, currentGuess, status }) => {
+}> = ({ guesses, hits, hitsByLetter, currentGuess, status }) => {
   const rows = [...new Array(MAX_GUESSES)];
 
   return (
@@ -76,9 +77,13 @@ export const PlayArea: FC<{
         return [...new Array(WORD_LENGTH)].map((_, j) => (
           <Box
             key={`box-${i}-${j}`}
-            className={`${rowHits[j]}${
-              status === 'guess' && showCurrent ? ' active' : ''
-            }`}
+            className={`${
+              rowGuess
+                ? rowHits[j]
+                : hitsByLetter[currentGuess[j]] === 'miss'
+                ? 'miss'
+                : ''
+            }${status === 'guess' && showCurrent ? ' active' : ''}`}
           >
             {rowGuess ? rowGuess[j] : showCurrent ? currentGuess[j] || '' : ''}
           </Box>

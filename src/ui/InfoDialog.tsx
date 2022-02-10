@@ -2,9 +2,11 @@ import ReloadIcon from 'icons/reload.svg';
 import ResetIcon from 'icons/reset.svg';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { Dialog } from 'ui/Dialog';
+import { Settings } from 'ui/Settings';
+import { SettingsState } from 'utils/settings';
 import { ButtonWithHover } from 'utils/style';
 import { theme } from 'utils/theme';
-import { Dialog } from './Dialog';
 
 const Text = styled.p`
   margin: 0 0 1rem;
@@ -62,7 +64,8 @@ export const InfoDialog: FC<{
   isOpen: boolean;
   close: () => void;
   resetStatistics: () => void;
-}> = ({ isOpen, close, resetStatistics }) => {
+  settings: SettingsState;
+}> = ({ isOpen, close, resetStatistics, settings }) => {
   return (
     <Dialog title="Info" isOpen={isOpen} close={close}>
       <Text>
@@ -76,6 +79,7 @@ export const InfoDialog: FC<{
         kohdasta. <Dim>Harmaalla</Dim> merkitty kirjain ei löydy sanasta
         ollenkaan.
       </Text>
+      <Settings {...settings} />
       <div>
         <ReloadButton onClick={() => window.location.reload()}>
           Päivitä sivu

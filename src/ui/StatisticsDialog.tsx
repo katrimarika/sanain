@@ -1,11 +1,11 @@
 import RefreshIcon from 'icons/refresh.svg';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { Dialog } from 'ui/Dialog';
 import { StatisticsView } from 'ui/StatisticsView';
 import { ButtonWithHover } from 'utils/style';
 import { theme } from 'utils/theme';
 import { Statistics } from 'utils/word-to-guess';
-import { Dialog } from './Dialog';
 
 const Button = styled(ButtonWithHover)`
   margin-top: 2rem;

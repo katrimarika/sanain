@@ -2,21 +2,23 @@ import * as RadixDialog from '@radix-ui/react-dialog';
 import CrossIcon from 'icons/cross.svg';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { ButtonWithHover } from 'utils/style';
+import { ButtonWithHover, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   padding: 1rem;
+
+  ${onNotSmall} {
+    align-items: center;
+  }
 `;
 
 const Overlay = styled(RadixDialog.Overlay)`

@@ -2,23 +2,41 @@ import GraphIcon from 'icons/graph.svg';
 import InfoIcon from 'icons/info.svg';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { GameEndDialog } from 'ui/GameEndDialog';
+import { InfoDialog } from 'ui/InfoDialog';
 import { Keyboard } from 'ui/Keyboard';
+import { NativeKeyboardSupport } from 'ui/NativeKeyboardSupport';
 import { PlayArea } from 'ui/PlayArea';
 import { StatisticsDialog } from 'ui/StatisticsDialog';
 import { Toast } from 'ui/Toast';
-import { WORD_LENGTH } from 'utils/settings';
+import { LETTERS, useSettings, WORD_LENGTH } from 'utils/settings';
 import { checkForStorage } from 'utils/storage';
 import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 import { getHitsByLetter, getHitsForGuesses } from 'utils/word-helpers';
 import { useWordToGuess } from 'utils/word-to-guess';
-import { GameEndDialog } from './GameEndDialog';
-import { InfoDialog } from './InfoDialog';
 
 const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+
+  ${onLandscape} {
+    position: relative;
+    top: unset;
+    left: unset;
+    right: unset;
+    bottom: unset;
+    height: unset;
+    max-height: unset;
+    min-height: 100vh;
+  }
 `;
 
 const Header = styled.header`
@@ -35,8 +53,8 @@ const Title = styled.h1`
   margin: 0.75rem 0;
 `;
 
-const Main = styled.main`
-  margin: 0 auto;
+const StyledMain = styled.main`
+  position: relative;
   flex-grow: 1;
   width: 100%;
   padding: 1rem 0.25rem 1.5rem;
@@ -45,6 +63,13 @@ const Main = styled.main`
   grid-template-rows: auto minmax(auto, 50%);
   grid-gap: 2rem 0.25rem;
 
+  ${onNotSmall} {
+    padding-top: 2rem;
+    grid-gap: 4rem 0.75rem;
+  }
+`;
+
+const LandscapeSideBySideMain = styled(StyledMain)`
   ${onLandscape} {
     grid-template-columns: auto minmax(auto, 60%);
     grid-auto-rows: auto;
@@ -53,10 +78,21 @@ const Main = styled.main`
       grid-template-columns: minmax(auto, 50%) minmax(auto, 60%);
     }
   }
+`;
 
-  ${onNotSmall} {
-    padding-top: 2rem;
-    grid-gap: 4rem 0.75rem;
+const ControlAreaWrapper = styled.div`
+  margin: auto auto 0;
+  width: 100%;
+  max-width: 28rem;
+
+  ${onLandscape} {
+    margin-top: 0;
+    margin-bottom: auto;
+    padding-right: 1.25rem;
+
+    ${onNotSmall} {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -99,6 +135,8 @@ export const App: FC = () => {
   const [statsDialogOpen, setStatsDialogOpen] = useState(false);
   const [endDialogOpen, setEndDialogOpen] = useState(false);
 
+  const settings = useSettings();
+
   const hits = getHitsForGuesses(word, guesses);
   const hitsByLetter = getHitsByLetter(hits, guesses);
 
@@ -117,6 +155,10 @@ export const App: FC = () => {
     }
   }, [status]);
 
+  const Main = settings.onlyNativeKeyboard
+    ? StyledMain
+    : LandscapeSideBySideMain;
+
   return (
     <Wrapper>
       <Header>
@@ -130,39 +172,50 @@ export const App: FC = () => {
       <Main>
         <PlayArea
           hits={hits}
+          hitsByLetter={hitsByLetter}
           guesses={guesses}
           currentGuess={currentGuess}
           status={status}
         />
-        <Keyboard
-          captureKeyPresses={
-            status === 'guess' && !statsDialogOpen && !infoDialogOpen
-          }
-          hitsByLetter={hitsByLetter}
-          onPress={(l) => {
-            if (status === 'guess') {
-              setCurrentGuess((g) => (g.length < WORD_LENGTH ? `${g}${l}` : g));
-            }
-          }}
-          onRemove={() => setCurrentGuess((g) => g.slice(0, g.length - 1))}
-          onSubmit={() => {
-            if (status !== 'guess' && !endDialogOpen) {
-              setEndDialogOpen(true);
-            }
-            if (currentGuess.length < WORD_LENGTH) {
-              return;
-            }
-            const validGuess = submitGuess(currentGuess);
-            if (validGuess) {
-              setCurrentGuess('');
-            } else {
-              setToastMessage('Sana ei löydy sanalistasta.');
-              setTimeout(() => setToastMessage(''), 1000);
-            }
-          }}
-        />
+        <ControlAreaWrapper>
+          <Toast show={!!toastMessage}>{toastMessage}</Toast>
+          {settings.onlyNativeKeyboard ? (
+            <NativeKeyboardSupport
+              active={status === 'guess' && !statsDialogOpen && !infoDialogOpen}
+              currentGuess={currentGuess}
+              onChange={(g) => {
+                if (status === 'guess') {
+                  const filtered = g
+                    .toLowerCase()
+                    .split('')
+                    .filter((l) => LETTERS.includes(l))
+                    .join('');
+                  if (filtered.length <= WORD_LENGTH) {
+                    setCurrentGuess(filtered);
+                  }
+                }
+              }}
+              onSubmit={onSubmit}
+            />
+          ) : (
+            <Keyboard
+              captureKeyPresses={
+                status === 'guess' && !statsDialogOpen && !infoDialogOpen
+              }
+              hitsByLetter={hitsByLetter}
+              onPress={(l) => {
+                if (status === 'guess') {
+                  setCurrentGuess((g) =>
+                    g.length < WORD_LENGTH ? `${g}${l}` : g
+                  );
+                }
+              }}
+              onRemove={() => setCurrentGuess((g) => g.slice(0, g.length - 1))}
+              onSubmit={onSubmit}
+            />
+          )}
+        </ControlAreaWrapper>
       </Main>
-      <Toast show={!!toastMessage}>{toastMessage}</Toast>
       {status !== 'guess' && (
         <GameEndDialog
           isOpen={endDialogOpen}
@@ -191,7 +244,24 @@ export const App: FC = () => {
         isOpen={infoDialogOpen}
         close={() => setInfoDialogOpen(false)}
         resetStatistics={resetStatistics}
+        settings={settings}
       />
     </Wrapper>
   );
+
+  function onSubmit() {
+    if (status !== 'guess' && !endDialogOpen) {
+      setEndDialogOpen(true);
+    }
+    if (currentGuess.length < WORD_LENGTH) {
+      return;
+    }
+    const validGuess = submitGuess(currentGuess);
+    if (validGuess) {
+      setCurrentGuess('');
+    } else {
+      setToastMessage('Sana ei löydy sanalistasta.');
+      setTimeout(() => setToastMessage(''), 1000);
+    }
+  }
 };
