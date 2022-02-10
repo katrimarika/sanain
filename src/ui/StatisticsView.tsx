@@ -8,6 +8,10 @@ const Text = styled.p`
   margin: 0 0 0.75rem;
 `;
 
+const Label = styled.span`
+  font-weight: bold;
+`;
+
 const Subtitle = styled.h3`
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
@@ -41,7 +45,13 @@ export const StatisticsView: FC<{
   statistics: Statistics;
   currenWinGuessCount?: number;
 }> = ({
-  statistics: { totalPlayed, totalWins, totalLosses, winDistribution },
+  statistics: {
+    totalPlayed,
+    totalWins,
+    currentStreak,
+    maxStreak,
+    winDistribution,
+  },
   currenWinGuessCount,
 }) => {
   const biggestWinCount =
@@ -49,7 +59,20 @@ export const StatisticsView: FC<{
 
   return (
     <>
-      <Text>{`Pelejä aloitettu ${totalPlayed} (voitot ${totalWins}, häviöt ${totalLosses})`}</Text>
+      <Text>
+        <Label>Pelejä pelattu: </Label>
+        {totalPlayed}
+      </Text>
+      <Text>
+        <Label>Voitot: </Label>
+        {`${totalWins} (${
+          totalPlayed ? Math.round((totalWins / totalPlayed) * 100) : 0
+        }%)`}
+      </Text>
+      <Text>
+        <Label>Voittoputki: </Label>
+        {`${currentStreak} (pisin: ${maxStreak})`}
+      </Text>
       <Subtitle>Voittojen arvausjakauma</Subtitle>
       <Container>
         {[...new Array(MAX_GUESSES)].map((_, i) => (

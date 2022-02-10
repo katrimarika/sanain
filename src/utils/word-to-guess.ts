@@ -56,7 +56,8 @@ const storeGuesses = (gs: string[]) => {
 export type Statistics = {
   totalPlayed: number;
   totalWins: number;
-  totalLosses: number;
+  currentStreak: number;
+  maxStreak: number;
   winDistribution: { [key: number]: number };
 };
 
@@ -67,12 +68,19 @@ const getStatistics = (): Statistics => {
     try {
       const parsed = JSON.parse(stored);
       if (parsed && typeof parsed === 'object') {
-        const { totalPlayed, totalWins, totalLosses, winDistribution } = parsed;
+        const {
+          totalPlayed,
+          totalWins,
+          currentStreak,
+          maxStreak,
+          winDistribution,
+        } = parsed;
         const toNum = (d: unknown) => (typeof d === 'number' && d >= 0 ? d : 0);
         return {
           totalPlayed: toNum(totalPlayed),
           totalWins: toNum(totalWins),
-          totalLosses: toNum(totalLosses),
+          currentStreak: toNum(currentStreak),
+          maxStreak: toNum(maxStreak),
           winDistribution:
             winDistribution && typeof winDistribution === 'object'
               ? [...new Array(MAX_GUESSES)].reduce((obj, _, i) => {
@@ -93,29 +101,33 @@ const getStatistics = (): Statistics => {
   return {
     totalPlayed: 0,
     totalWins: 0,
-    totalLosses: 0,
+    currentStreak: 0,
+    maxStreak: 0,
     winDistribution: {},
   };
 };
 
-const handleCompletion = (
-  status: 'win' | 'lose' | 'giveup',
-  guessCount: number
-) => {
-  const { totalPlayed, totalWins, totalLosses, winDistribution } =
-    getStatistics();
-  const newStatistics: Statistics = {
-    totalPlayed: totalPlayed + 1,
-    totalWins: status === 'win' ? totalWins + 1 : totalWins,
-    totalLosses: status === 'lose' ? totalLosses + 1 : totalLosses,
-    winDistribution:
-      status === 'win'
-        ? {
+const handleCompletion = (status: 'win' | 'lose', guessCount: number) => {
+  const prevStats = getStatistics();
+  const { totalPlayed, totalWins, currentStreak, maxStreak, winDistribution } =
+    prevStats;
+  const newStatistics: Statistics =
+    status === 'win'
+      ? {
+          totalPlayed: totalPlayed + 1,
+          totalWins: totalWins + 1,
+          currentStreak: currentStreak + 1,
+          maxStreak: Math.max(currentStreak + 1, maxStreak),
+          winDistribution: {
             ...winDistribution,
             [guessCount]: (winDistribution[guessCount] ?? 0) + 1,
-          }
-        : { ...winDistribution },
-  };
+          },
+        }
+      : {
+          ...prevStats,
+          totalPlayed: totalPlayed + 1,
+          currentStreak: 0,
+        };
   storeData(statisticsStorageKey, JSON.stringify(newStatistics));
   return newStatistics;
 };
@@ -183,8 +195,8 @@ export const useWordToGuess = () => {
 
   function newGame() {
     if (status === 'guess') {
-      // If the game was not over, count starting new as giving up
-      const newStats = handleCompletion('giveup', guesses.length);
+      // If the game was not over, count starting new as loss
+      const newStats = handleCompletion('lose', guesses.length);
       setStatistics(newStats);
     }
     setWord(getWordToGuess({ forceNew: true }));
@@ -195,7 +207,8 @@ export const useWordToGuess = () => {
     setStatistics({
       totalPlayed: 0,
       totalWins: 0,
-      totalLosses: 0,
+      currentStreak: 0,
+      maxStreak: 0,
       winDistribution: {},
     });
     resetStoredStatistics();

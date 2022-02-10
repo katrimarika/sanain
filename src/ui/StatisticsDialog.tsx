@@ -42,8 +42,7 @@ export const StatisticsDialog: FC<{
     <Button onClick={newGame}>Uusi peli</Button>
     {showNotice && (
       <Notice>
-        Huom! Keskeneräinen peli merkitään luovutetuksi, jos aloitat uuden
-        pelin.
+        Huom! Keskeneräinen peli merkitään hävityksi, jos aloitat uuden pelin.
       </Notice>
     )}
   </Dialog>
