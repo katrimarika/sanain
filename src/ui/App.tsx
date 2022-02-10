@@ -57,7 +57,7 @@ const StyledMain = styled.main`
   position: relative;
   flex-grow: 1;
   width: 100%;
-  padding: 1rem 0.25rem 1.5rem;
+  padding: 1rem 0.25rem 2.5rem;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto minmax(auto, 50%);
@@ -91,11 +91,13 @@ const ControlAreaWrapper = styled.div`
     margin-top: 0;
     margin-bottom: auto;
   }
+
+  ${onNotSmall} {
+    max-width: 34rem;
+  }
 `;
 
 const ControlAreaSideBySide = styled(ControlAreaWrapper)`
-  max-width: 28rem;
-
   ${onLandscape} {
     padding-right: 1.25rem;
 

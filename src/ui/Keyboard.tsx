@@ -8,7 +8,7 @@ import { theme } from 'utils/theme';
 import { Hit } from 'utils/word-helpers';
 
 const Container = styled.div`
-  margin-top: auto;
+  margin: auto 0;
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: auto;
