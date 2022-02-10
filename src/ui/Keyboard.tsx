@@ -3,15 +3,20 @@ import WrapIcon from 'icons/wrap.svg';
 import React, { FC, Fragment, useEffect } from 'react';
 import styled from 'styled-components';
 import { LETTERS } from 'utils/settings';
-import { ButtonWithHover, onNotSmall } from 'utils/style';
+import { ButtonWithHover, onLandscape, onNotSmall } from 'utils/style';
 import { theme } from 'utils/theme';
 import { Hit } from 'utils/word-helpers';
 
 const Container = styled.div`
+  margin-top: auto;
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: auto;
   grid-gap: 0.25rem;
+
+  ${onLandscape} {
+    margin-top: 0;
+  }
 `;
 
 const Button = styled(ButtonWithHover)`

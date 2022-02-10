@@ -81,13 +81,22 @@ const LandscapeSideBySideMain = styled(StyledMain)`
 `;
 
 const ControlAreaWrapper = styled.div`
-  margin: auto auto 0;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 28rem;
 
   ${onLandscape} {
     margin-top: 0;
     margin-bottom: auto;
+  }
+`;
+
+const ControlAreaSideBySide = styled(ControlAreaWrapper)`
+  max-width: 28rem;
+
+  ${onLandscape} {
     padding-right: 1.25rem;
 
     ${onNotSmall} {
@@ -158,6 +167,9 @@ export const App: FC = () => {
   const Main = settings.onlyNativeKeyboard
     ? StyledMain
     : LandscapeSideBySideMain;
+  const ControlArea = settings.onlyNativeKeyboard
+    ? ControlAreaWrapper
+    : ControlAreaSideBySide;
 
   return (
     <Wrapper>
@@ -177,7 +189,7 @@ export const App: FC = () => {
           currentGuess={currentGuess}
           status={status}
         />
-        <ControlAreaWrapper>
+        <ControlArea>
           <Toast show={!!toastMessage}>{toastMessage}</Toast>
           {settings.onlyNativeKeyboard ? (
             <NativeKeyboardSupport
@@ -214,7 +226,7 @@ export const App: FC = () => {
               onSubmit={onSubmit}
             />
           )}
-        </ControlAreaWrapper>
+        </ControlArea>
       </Main>
       {status !== 'guess' && (
         <GameEndDialog
